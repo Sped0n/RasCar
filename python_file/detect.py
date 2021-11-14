@@ -7,7 +7,7 @@ colorRP = 'red1'
 colorG = 'green'
 colorB = 'blue'
 pi = 3.1415926
-all_rate = 0.6  # color rate
+all_rate = 0.6  # the color rate
 circularity = 80  # hough circularity, the higher it is, the more accurate it is.
 hough_params_2 = 20 #The parameter is set according to the size of the circle in your image. When the circle in
 # this image is smaller, then this value should be set smaller. When the setting is smaller, then more circles are
