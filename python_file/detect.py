@@ -40,7 +40,7 @@ while (1):
             Ycnts = cv2.findContours(colorY_hsv.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
             circles = cv2.HoughCircles(grey, cv2.HOUGH_GRADIENT, 1, circularity, param1=100, param2=hough_params_2,
                                        minRadius=20, maxRadius=40)
-            # Yrec detect
+            # rec detect
             if Ycnts:
                 maxcnt = max(Ycnts, key=cv2.contourArea)
                 rect = cv2.minAreaRect(maxcnt)
