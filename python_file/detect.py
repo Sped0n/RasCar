@@ -98,7 +98,7 @@ while (1):
                             Barea = pi * maxR * maxR
                             print("Blue", Barea)
 
-        cv2.imshow('camera', colorR_hsv)
+        cv2.imshow('camera', frame)
         cv2.waitKey(1)
 
 cap.release()
