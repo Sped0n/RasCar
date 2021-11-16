@@ -39,7 +39,7 @@ class CarUltrasound(object):
         stop_time = time.time()
     
         time_elapsed = stop_time - start_time
-        distance = (time_elapsed * 34300) / 2
+        distance = (time_elapsed * 34000) / 2
     
         return distance
 

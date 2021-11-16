@@ -26,7 +26,6 @@ cap = cv2.VideoCapture(0)
 
 try:
     while (1):
-
         ret, frame = cap.read()
         img = cv2.flip(frame, -1)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
