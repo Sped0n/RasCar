@@ -54,16 +54,16 @@ class CarMove(object):
         self.motor_5.ChangeDutyCycle(0)
         self.motor_6.ChangeDutyCycle(speed)
 
-    def track_right(self, delta):
-        self.motor_1.ChangeDutyCycle(30+delta)
+    def track_right(self, delta, rate):
+        self.motor_1.ChangeDutyCycle((30+delta)*rate)
         self.motor_4.ChangeDutyCycle(0)
-        self.motor_5.ChangeDutyCycle(30)
+        self.motor_5.ChangeDutyCycle(30*rate)
         self.motor_6.ChangeDutyCycle(0)
 
-    def track_left(self, delta):
-        self.motor_1.ChangeDutyCycle(30)
+    def track_left(self, delta, rate):
+        self.motor_1.ChangeDutyCycle(30*rate)
         self.motor_4.ChangeDutyCycle(0)
-        self.motor_5.ChangeDutyCycle(30-delta)
+        self.motor_5.ChangeDutyCycle(30-delta*rate)
         self.motor_6.ChangeDutyCycle(0)
 
     def brake(self):

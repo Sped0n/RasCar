@@ -50,14 +50,20 @@ try:
             car.brake()
             print("break")
         elif direction >= 0:
-            if direction > 70:
-                direction = 70
-            car.track_right(direction)
+            if direction <30:
+                car.track_right(direction, 1.5)
+            else:
+                if direction > 70:
+                    direction = 70
+                car.track_right(direction, 1)
             print("right")
         elif direction < -0:
-            if direction < -70:
-                direction = -70
-            car.track_left(direction)
+            if direction > -30:
+                car.track_left(direction, 1.5)
+            else:
+                if direction < -70:
+                    direction = -70
+                car.track_left(direction,1)
             print("left")
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
