@@ -7,8 +7,6 @@ from move import CarMove
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-
-
 class Car(CarMove):
     def __init__(self):
         CarMove.__init__(self)
@@ -20,9 +18,6 @@ class Car(CarMove):
 car=Car()
 center = 320
 cap = cv2.VideoCapture(0)
-# center定义
-
-
 
 try:
     while (1):
@@ -33,36 +28,32 @@ try:
         dst = cv2.dilate(dst, None, iterations=2)
         # dst = cv2.erode(dst, None, iterations=6)
         # cv2.imshow("dst", dst)
-        color = dst[300]
+        color = dst[180]
         try:
             black_count = np.sum(color == 0)
             black_index = np.where(color == 0)
             if black_count == 0:
                 black_count = 1
-            print("blackcount:", black_count)
+                car.back(30)
+                print("back")
+            #print("blackcount:", black_count)
             center = (black_index[0][black_count - 1] + black_index[0][0]) / 2
             direction = center - 320
-            print("direction", direction)
+            #print("direction", direction)
         except:
             continue
         if abs(direction) > 300:
-            car.brake()
-            print("break")
+            car.back(30)
+            print("back")
         elif direction >= 0:
-            if direction <30:
-                car.track_right(direction, 1.5)
-            else:
-                if direction > 70:
-                    direction = 70
-                car.track_right(direction, 1)
+            if direction > 70:
+                direction = 70
+            car.track_right(direction, 100/(30+direction)-0.01)
             print("right")
         elif direction < -0:
-            if direction > -30:
-                car.track_left(direction, 1.5)
-            else:
-                if direction < -70:
-                    direction = -70
-                car.track_left(direction,1)
+            if direction < -70:
+                direction = -70
+            car.track_left(direction, 100/(30+direction)-0.01)
             print("left")
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

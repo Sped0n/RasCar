@@ -1,12 +1,8 @@
-# Car's movement control (forward, back, left, right, brake)
-# motor control
-
 import RPi.GPIO as GPIO
 import time
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-
 
 class CarMove(object):
     def __init__(self):
@@ -63,7 +59,7 @@ class CarMove(object):
     def track_left(self, delta, rate):
         self.motor_1.ChangeDutyCycle(30*rate)
         self.motor_4.ChangeDutyCycle(0)
-        self.motor_5.ChangeDutyCycle(30-delta*rate)
+        self.motor_5.ChangeDutyCycle((30-delta)*rate)
         self.motor_6.ChangeDutyCycle(0)
 
     def brake(self):
@@ -89,7 +85,6 @@ class CarMove(object):
         self.motor_4.ChangeDutyCycle(20)
         self.motor_5.ChangeDutyCycle(20)
         self.motor_6.ChangeDutyCycle(40)
-
 
 if __name__ == '__main__':
     try:
