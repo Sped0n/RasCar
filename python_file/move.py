@@ -11,15 +11,15 @@ class CarMove(object):
         GPIO_motor_5 = 24
         GPIO_motor_6 = 25
 
-        GPIO.setup(GPIO_motor_1, GPIO.OUT)  # GPIO input/output definiation
+        GPIO.setup(GPIO_motor_1, GPIO.OUT)  # GPIO input/output
         GPIO.setup(GPIO_motor_4, GPIO.OUT)
         GPIO.setup(GPIO_motor_5, GPIO.OUT)
         GPIO.setup(GPIO_motor_6, GPIO.OUT)
 
-        self.motor_1 = GPIO.PWM(GPIO_motor_1, 500)  # PWM initialization: 500 Hz
-        self.motor_4 = GPIO.PWM(GPIO_motor_4, 500)
-        self.motor_5 = GPIO.PWM(GPIO_motor_5, 500)
-        self.motor_6 = GPIO.PWM(GPIO_motor_6, 500)
+        self.motor_1 = GPIO.PWM(GPIO_motor_1, 1000)  # PWM initialization
+        self.motor_4 = GPIO.PWM(GPIO_motor_4, 1000)
+        self.motor_5 = GPIO.PWM(GPIO_motor_5, 1000)
+        self.motor_6 = GPIO.PWM(GPIO_motor_6, 1000)
 
         self.motor_1.start(0)  # motors start
         self.motor_4.start(0)
@@ -27,7 +27,7 @@ class CarMove(object):
         self.motor_6.start(0)
 
     def forward(self, speed):
-        self.motor_1.ChangeDutyCycle(speed)  # set the duty circle (range: 0~100)
+        self.motor_1.ChangeDutyCycle(speed)
         self.motor_4.ChangeDutyCycle(0)
         self.motor_5.ChangeDutyCycle(speed)
         self.motor_6.ChangeDutyCycle(0)
