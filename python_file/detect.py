@@ -37,7 +37,6 @@ while (1):
             hsv = cv2.cvtColor(gs_frame, cv2.COLOR_BGR2HSV)
             hsv = cv2.erode(hsv, None, iterations=2)
             colorY_hsv = cv2.inRange(hsv, color_dist[colorY]['Lower'], color_dist[colorY]['Upper'])
-            colorR_hsv = cv2.inRange(hsv, color_dist[colorR]['Lower'], color_dist[colorR]['Upper']) + cv2.inRange(hsv, color_dist[colorRP]['Lower'], color_dist[colorRP]['Upper'])
             Ycnts = cv2.findContours(colorY_hsv.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
             circles = cv2.HoughCircles(grey, cv2.HOUGH_GRADIENT, 1, circularity, param1=100, param2=hough_params_2,
                                        minRadius=10, maxRadius=80)
@@ -51,51 +50,44 @@ while (1):
                 cv2.drawContours(frame, [np.int0(box)], -1, (0, 255, 255), 2)
 
             if circles is not None:
-                maxR = 0
-                circles = np.uint16(np.around(circles))
-                for i in circles[0, :]:
-                    #if i[2] > maxR:
-                    maxR = int(i[2])
-                    maxX = int(i[0])
-                    maxY = int(i[1])
-                # detect area constrain
-                    if (maxY - maxR) < 0 or (maxX - maxR) < 0:
-                        detect_area = None
-                    elif (maxY + maxR) > 480 or (maxX +maxR) >640:
-                        detect_area = None
-                    else:
-                        detect_area = (hsv[maxY - maxR:maxY + maxR, maxX - maxR:maxX + maxR])
-                    if detect_area is not None:
-                        max_circ_area = maxR * maxR * 4
+                x = circles[0][:, 0].astype(int)
+                y = circles[0][:, 1].astype(int)
+                r = circles[0][:, 2].astype(int)
+                num = circles[0].shape[0]
+                rate = np.zeros(num)
+                for i in range(num):  # traverse all detected circles
+                    detect_area = (hsv[y[i]-r[i]: y[i]+r[i], x[i]-r[i]:x[i]+r[i]])  # A square in the detected circle
+                    height, width, channel = detect_area.shape
                         # red filter
+                    if height !=0 and width !=0:
                         red_mask = cv2.inRange(detect_area, color_dist[colorR]['Lower'],
                                            color_dist[colorR]['Upper']) + cv2.inRange(detect_area,
                                                                                       color_dist[colorRP]['Lower'],
                                                                                       color_dist[colorRP]['Upper'])
                         red_num_point = np.sum(red_mask / 255)
-                        Rrate = red_num_point / (maxR * maxR * 4)
+                        Rrate = red_num_point / (height * width)
                         # green filter
                         green_mask = cv2.inRange(detect_area, color_dist[colorG]['Lower'], color_dist[colorG]['Upper'])
                         green_num_point = np.sum(green_mask / 255)
-                        Grate = green_num_point / max_circ_area
+                        Grate = green_num_point / (height * width)
                         # blue filter
                         blue_mask = cv2.inRange(detect_area, color_dist[colorB]['Lower'], color_dist[colorB]['Upper'])
                         blue_num_point = np.sum(blue_mask / 255)
-                        Brate = blue_num_point / max_circ_area
+                        Brate = blue_num_point / (height * width)
                         if Rrate > all_rate:
-                            cv2.circle(frame, (maxX, maxY), maxR, (255, 0, 0), 2)
-                            cv2.circle(frame, (maxX, maxY), 2, (255, 255, 0), 3)
-                            Rarea = pi * maxR * maxR
+                            cv2.circle(frame, (x[i], y[i]), r[i], (255, 0, 0), 2)
+                            cv2.circle(frame, (x[i], y[i]), 2, (255, 255, 0), 3)
+                            Rarea = pi * r[i] * r[i]
                             print("Red", Rarea)
                         if Grate > all_rate:
-                            cv2.circle(frame, (maxX, maxY), maxR, (0, 0, 255), 2)
-                            cv2.circle(frame, (maxX, maxY), 2, (0, 0, 255), 3)
-                            Garea = pi * maxR * maxR
+                            cv2.circle(frame, (x[i], y[i]), r[i], (0, 0, 255), 2)
+                            cv2.circle(frame, (x[i], y[i]), 2, (0, 0, 255), 3)
+                            Garea = pi * r[i] * r[i]
                             print("Green", Garea)
                         if Brate > all_rate:
-                            cv2.circle(frame, (maxX, maxY), maxR, (0, 255, 0), 2)
-                            cv2.circle(frame, (maxX, maxY), 2, (0, 255, 0), 3)
-                            Barea = pi * maxR * maxR
+                            cv2.circle(frame, (x[i], y[i]), r[i], (0, 255, 0), 2)
+                            cv2.circle(frame, (x[i], y[i]), 2, (0, 255, 0), 3)
+                            Barea = pi * r[i] * r[i]
                             print("Blue", Barea)
 
         cv2.imshow('camera', frame)
