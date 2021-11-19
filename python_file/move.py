@@ -6,7 +6,7 @@ GPIO.setmode(GPIO.BCM)
 
 class CarMove(object):
     def __init__(self):
-        GPIO_motor_1 = 18  # GPIO setting (BCM coding)
+        GPIO_motor_1 = 18  # GPIO setting (!BCM coding!)
         GPIO_motor_4 = 23
         GPIO_motor_5 = 24
         GPIO_motor_6 = 25
