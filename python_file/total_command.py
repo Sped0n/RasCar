@@ -45,6 +45,8 @@ try:
         black_index = np.where(color == 0)
         if black_count == 0:
             black_count = 1
+            car.back(30)
+            print("back")
         print("blackcount:", black_count)
         center = (black_index[0][black_count - 1] + black_index[0][0]) / 2
         direction = center - 320
@@ -53,45 +55,55 @@ try:
         if (start_time is None) or (time.time() - start_time > 0.5):
             start_time = None
             if left_measure == 0 and right_measure == 1:
-                print("Going right")
+                print("Going right, obstacle left")
                 car.right(80)
-            elif left_measure == 1 and right_measure == 0:
-                print("Going left")
+                car.forward(35)
+                time.sleep(0.5)
                 car.left(80)
+                car.forward(35)
+                time.sleep(0.5)
+            elif left_measure == 1 and right_measure == 0:
+                print("Going left, obstacle right")
+                car.left(80)
+                car.forward(35)
+                time.sleep(0.5)
+                car.right(80)
+                car.forward(35)
+                time.sleep(0.5)
             else:
                 if dist_mov_ave < 20:
                     car.left(80)
                     print("Left routing")
-                    car.forward(35)
+                    car.forward(45)
                     time.sleep(0.5)
                     car.right(80)
                     car.forward(35)
                     time.sleep(0.5)
                     start_time = time.time()
                 elif dist_mov_ave < 100:
-                    slow_down_rate = 0.8
+                    slow_down_rate = 0.7
 
         # line tracking
         if abs(direction) > 300:
-            car.back(80)
+            car.back(30)
             print("back")
         elif direction >= 0:
             if direction < 30:
-                car.track_right(direction, 1.5 * slow_down_rate)
+                car.track_right(direction, 100/(30+direction)-0.01 * slow_down_rate)
                 print("tiny right")
             else:
                 if direction > 70:
                     direction = 70
-                car.track_right(direction, 1 * slow_down_rate)
+                car.track_right(direction, 0.8 * slow_down_rate)
                 print("right")
         elif direction < -0:
             if direction > -30:
-                car.track_left(direction, 1.5 * slow_down_rate)
+                car.track_left(direction, 100/(30+direction)-0.01 * slow_down_rate)
                 print("tiny left")
             else:
                 if direction < -70:
                     direction = -70
-                car.track_left(direction, 1 * slow_down_rate)
+                car.track_left(direction, 0.8 * slow_down_rate)
                 print("left")
 
 except KeyboardInterrupt as results:
